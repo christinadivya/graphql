@@ -1,0 +1,9 @@
+export var ErrorCode;
+(function (ErrorCode) {
+    ErrorCode[ErrorCode["JobNotExist"] = -1] = "JobNotExist";
+    ErrorCode[ErrorCode["JobLockNotExist"] = -2] = "JobLockNotExist";
+    ErrorCode[ErrorCode["JobNotInState"] = -3] = "JobNotInState";
+    ErrorCode[ErrorCode["JobPendingDependencies"] = -4] = "JobPendingDependencies";
+    ErrorCode[ErrorCode["ParentJobNotExist"] = -5] = "ParentJobNotExist";
+})(ErrorCode || (ErrorCode = {}));
+//# sourceMappingURL=error-code.enum.js.map

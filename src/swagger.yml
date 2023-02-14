@@ -1,0 +1,246 @@
+openapi: 3.0.1
+info:
+  title: WebService Boilerplate
+  description: ""
+  version: 1.0.0
+servers:
+  - url: /api
+tags:
+  - name: User
+    description: Operations about user
+paths:
+  /users:
+    post:
+      tags:
+        - User
+      summary: To create a new user
+      description: Use this method to create a new user.
+      operationId: create-user
+      parameters:
+        - $ref: "#/components/parameters/app_language"
+        - $ref: "#/components/parameters/app_version"
+      requestBody:
+        description: Create User
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUser"
+            examples:
+              create_user:
+                $ref: "#/components/examples/CreateUser"
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              examples:
+                new user:
+                  $ref: "#/components/examples/CreateUserResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-codegen-request-body-name: body
+      security:
+        - Authorization: []
+components:
+  parameters:
+    app_language:
+      in: header
+      name: app-language
+      required: true
+      description: app language
+      schema:
+        type: string
+        example: en
+    app_version:
+      in: header
+      name: app_version
+      required: true
+      description: app version
+      schema:
+        type: number
+        example: "1"
+    sortBy:
+      name: "sortBy"
+      in: "query"
+      description: "Select the sort order (Ex:DESC)"
+      schema:
+        type: "string"
+        enum: [DESC, ASC]
+        example: DESC
+    sortField:
+      name: "sortField"
+      in: "query"
+      description: "enter the sort order (Ex:created_at)"
+      schema:
+        type: "string"
+        example: created_at
+    page:
+      name: page
+      in: "query"
+      description: "Mention the page number (Ex:10)"
+      required: true
+      schema:
+        type: number
+        example: 1
+    limit:
+      name: limit
+      in: "query"
+      description: "Mention the limit should display per page (Ex:10)"
+      required: true
+      schema:
+        type: number
+        example: 10
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header
+  schemas:
+    CreateUser:
+      allOf:
+        - type: object
+          properties:
+            first_name:
+              type: string
+            last_name:
+              type: string
+            phone:
+              type: string
+            country_code:
+              type: string
+              description: e.g, 91
+            password:
+              type: string
+    Error:
+      type: object
+      required:
+        - statusCode
+        - message
+      properties:
+        statusCode:
+          type: number
+        message:
+          type: string
+    ValidationError:
+      required:
+        - message
+      properties:
+        message:
+          type: object
+          required:
+            - name
+            - message
+            - statusCode
+            - error
+            - details
+          properties:
+            name:
+              type: string
+              description: ValidationError
+            message:
+              type: string
+              description: Validation Failed
+            statusCode:
+              type: number
+              description: This will be 422 for this type of error
+            error:
+              type: string
+              description: Bad Request
+            details:
+              type: array
+              items:
+                type: string
+                description: Validation failed fields will return
+        stack:
+          type: string
+          description: Error stack will return
+  examples:
+    CreateUser:
+      value:
+        first_name: Test
+        last_name: User
+        phone: "9566796870"
+        country_code: "91"
+        email: test@yopmail.com
+        password: Password1!
+    CreateUserResponse:
+      value:
+        result:
+          - id: 1
+            first_name: test
+            last_name: user
+            email: testuser@yopmail.com
+            country_code: 91
+            phone: 9944334499
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Error"
+              - type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 404
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Error"
+              - type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 401
+    BadRequest:
+      description: BadRequest
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Error"
+              - type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 400
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Error"
+              - type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 422
+    TooManyRequests:
+      description: Too many Requests
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Error"
+              - type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 429

@@ -1,0 +1,11 @@
+[2022-09-11T18:13:23.341] [ERROR] app - Error: connect ETIMEDOUT
+    at Error.<anonymous> (/home/laptop-pr-29/Project/GraphQL/node_modules/core-js/internals/wrap-error-constructor-with-cause.js:37:62)
+    at new Error (/home/laptop-pr-29/Project/GraphQL/node_modules/core-js/modules/es.error.cause.js:28:43)
+    at PoolConnection._handleTimeoutError (/home/laptop-pr-29/Project/GraphQL/node_modules/mysql2/lib/connection.js:189:17)
+    at listOnTimeout (internal/timers.js:554:17)
+    at processTimers (internal/timers.js:497:7) {
+  errorno: 'ETIMEDOUT',
+  code: 'ETIMEDOUT',
+  syscall: 'connect',
+  fatal: true
+} Unable to start the server!
